@@ -10,16 +10,24 @@ function App() {
           <h1>AgriDuty</h1>
           <p>Make data-driven decisions based on tariffs and weather</p>
           <nav className="banner-nav">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
+            <a href="#home" onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
+            }}>Home</a>
+            <a href="#about" onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+            }}>About</a>
           </nav>
         </div>
       </header>
 
       {/* Main Content Sections */}
       <main>
-        <Home /> {/* this is the home component, where the google maps will go */}
-        <section className="section" id="about">
+        <section className="section" id="home" style={{ scrollMarginTop: '80px' }}>
+          <Home />
+        </section>
+        <section className="section" id="about" style={{ scrollMarginTop: '80px' }}>
           <h2>About Us</h2>
           <p>AgriDuty is a comprehensive platform designed to help farmers and agricultural businesses manage their operations efficiently.</p>
         </section>
