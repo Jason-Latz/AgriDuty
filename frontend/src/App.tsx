@@ -1,10 +1,12 @@
 import './App.css'
 import Home from './components/Home'
 import LandingPage from './components/LandingPage'
+import ScrollHandler from './components/ScrollHandler'
 
 function App() {
   return (
     <div className="app">
+      <ScrollHandler />
       {/* Banner Section */}
       <header className="banner">
         <div className="banner-content">
