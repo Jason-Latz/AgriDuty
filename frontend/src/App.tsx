@@ -8,6 +8,7 @@ function App() {
       <header className="banner">
         <div className="banner-content">
           <h1>AgriDuty</h1>
+          <p>Make data-driven decisions based on tariffs and weather</p>
           <nav className="banner-nav">
             <a href="#home">Home</a>
             <a href="#about">About</a>
