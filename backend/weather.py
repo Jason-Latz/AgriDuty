@@ -32,25 +32,37 @@ if response.status_code == 200:
     # Load the trained model
     model = load('model.pkl')  # Load your trained model
 
-    # Prepare input data for the model
-    # Assuming crop_type is an integer index (e.g., 0 for Corn, 1 for Soybeans, etc.)
-    crop_type_index = 0  # Example: replace with the actual index you want to predict for
-    month = 1  # Example: replace with the actual month (1 for January, 2 for February, etc.)
+    # Load crop types from crops.txt
+    with open('crops.txt', 'r') as file:
+        crops = [line.strip() for line in file.readlines()]  # Read and strip whitespace
 
-    # Create a DataFrame for the model input
-    input_data = pd.DataFrame({
-        'crop_type': [crop_type_index],
-        'month': [month],
-        'temperature_celsius': [temperature_celsius],
-        'humidity_percent': [humidity_percent],
-        'pressure_hpa': [pressure_hpa],
-        'rainfall_mm': [rainfall_mm],
-        'wind_speed_mps': [wind_speed_mps]
-    })
+    # Prepare a list to store predictions
+    predictions = []
 
-    # Make predictions
-    quantity_normalized = model.predict(input_data)  # Get the predicted quantity normalized
-    print(f"Predicted Quantity Normalized: {quantity_normalized[0]}")  # Print the prediction
+    # Iterate through each crop and make predictions
+    for crop_type_index, crop in enumerate(crops):
+        # Create a DataFrame for the model input
+        input_data = pd.DataFrame({
+            'crop_type': [crop_type_index],
+            'month': [1],  # Example: replace with the actual month (1 for January, etc.)
+            'temperature_celsius': [temperature_celsius],
+            'humidity_percent': [humidity_percent],
+            'pressure_hpa': [pressure_hpa],
+            'rainfall_mm': [rainfall_mm],
+            'wind_speed_mps': [wind_speed_mps]
+        })
+
+        # Make predictions
+        quantity_normalized = model.predict(input_data)  # Get the predicted quantity normalized
+        predictions.append((crop, quantity_normalized[0]))  # Store crop name and prediction
+
+    # Sort predictions in descending order
+    predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
+
+    # Display the results
+    print("Predicted Quantity Normalized for each crop (sorted in descending order):")
+    for crop, quantity in predictions:
+        print(f"{crop}: {quantity}")
 
 else:
     print(f"Error: {response.status_code} - {response.text}")  # Print error message
