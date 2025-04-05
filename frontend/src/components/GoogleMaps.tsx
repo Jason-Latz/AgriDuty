@@ -9,6 +9,15 @@ const GoogleMaps = () => {
         defaultZoom={3.5}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
+        restriction={{
+          latLngBounds: {
+            north: 52.0, // Northernmost point (Alaska)
+            south: 18.0, // Southernmost point (Hawaii)
+            west: -140.0, // Westernmost point (Alaska)
+            east: -60.0, // Easternmost point (Maine)
+          },
+          strictBounds: true,
+        }}
       />
     </APIProvider>
   );
