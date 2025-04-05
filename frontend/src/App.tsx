@@ -1,5 +1,6 @@
 import './App.css'
 import Home from './components/Home'
+import LandingPage from './components/LandingPage'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
       {/* Main Content Sections */}
       <main>
+        <LandingPage />
         <section className="section" id="home" style={{ scrollMarginTop: '80px' }}>
           <Home />
         </section>
