@@ -9,6 +9,8 @@ html, body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #f8f9fa;
+  scroll-behavior: smooth;
 }
 
 .app {
@@ -16,20 +18,98 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   position: relative;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9f5f0 100%);
+}
+
+/* Landing Page Styles */
+.landing-page {
+  width: 100%;
+  height: 100vh;
+  background-image: url('../src/assets/Tractor_Sunset_Commodies_1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.7)
+  );
+}
+
+.landing-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.landing-content h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.landing-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.landing-button {
+  background-color: #2c5530;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.landing-button:hover {
+  background-color: #4a7856;
+  transform: translateY(-2px);
 }
 
 /* Banner Styles */
 .banner {
   width: 100%;
-  background: linear-gradient(135deg, #2c3e50, #3498db);
+  background: rgba(44, 85, 48, 0.3);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.banner.scrolled {
+  background: rgba(44, 85, 48, 0.95);
+  padding: 1rem 2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -45,8 +125,26 @@ html, body {
 }
 
 .banner h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  transition: font-size 0.3s ease;
+}
+
+.banner.scrolled h1 {
+  font-size: 2rem;
+}
+
+.banner p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.banner.scrolled p {
+  font-size: 1.5rem;
+  opacity: 0.9;
 }
 
 .banner-nav {
@@ -58,39 +156,58 @@ html, body {
   color: white;
   text-decoration: none;
   font-size: 1.1rem;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
+  position: relative;
+  padding: 0.5rem 0;
+  font-weight: 500;
 }
 
 .banner-nav a:hover {
   opacity: 0.8;
 }
 
-.banner p {
-  font-size: 1.5rem;
-  opacity: 0.9;
-}
-
 /* Section Styles */
 .section {
   width: 100%;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+}
+
+/* Home section specific styles */
+#home.section {
+  padding-top: 3rem;
 }
 
 .section:nth-child(even) {
-  background-color: #f8f9fa;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .section h2 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: #2c3e50;
+  color: #2c5530;
+  font-weight: 700;
+  letter-spacing: -1px;
+  position: relative;
+  display: inline-block;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: #2c5530;
+  border-radius: 2px;
 }
 
 .section p {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.8;
   color: #34495e;
 }
 
@@ -105,41 +222,122 @@ html, body {
 
 .feature-card {
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .feature-card h3 {
-  color: #3498db;
+  color: #2c5530;
   margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.feature-card p {
+  color: #4a5568;
+  line-height: 1.6;
 }
 
 /* Footer Styles */
 .footer {
   width: 100vw;
-  background-color: #2c3e50;
+  background: #2c5530;
   color: white;
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 2rem;
   margin-top: auto;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
+  position: relative;
 }
 
+.footer p {
+  position: relative;
+  z-index: 1;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Update main styles */
 main {
-  margin-top: 4rem; /* Add margin to account for fixed banner */
+  position: relative;
+  z-index: 1;
+}
+
+/* Map Container Styles */
+.map-container {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.map-wrapper {
+  flex: 2;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: white;
+  min-height: 500px;
+}
+
+.map-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 300px;
+}
+
+.coordinates-display {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.coordinates-display h3 {
+  color: #2c5530;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.coordinate-field {
+  margin-bottom: 1rem;
+}
+
+.coordinate-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.coordinate-value {
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  color: #2d3748;
+  font-family: monospace;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .banner h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
   
   .banner p {
@@ -147,10 +345,31 @@ main {
   }
   
   .section {
-    padding: 3rem 1.5rem;
+    padding: 4rem 1.5rem;
   }
   
   .features-grid {
     grid-template-columns: 1fr;
+  }
+
+  .landing-content h1 {
+    font-size: 3rem;
+  }
+
+  .landing-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .map-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .map-wrapper {
+    min-height: 400px;
+  }
+
+  .map-controls {
+    min-width: auto;
   }
 }
