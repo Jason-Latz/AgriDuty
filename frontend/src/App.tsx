@@ -1,4 +1,5 @@
 import './App.css'
+import Home from './components/Home'
 
 function App() {
   return (
@@ -6,13 +7,17 @@ function App() {
       {/* Banner Section */}
       <header className="banner">
         <div className="banner-content">
-          <h1>Welcome to AgriDuty</h1>
-          <p>Your Agricultural Management Solution</p>
+          <h1>AgriDuty</h1>
+          <nav className="banner-nav">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+          </nav>
         </div>
       </header>
 
       {/* Main Content Sections */}
       <main>
+        <Home /> {/* this is the home component, where the google maps will go */}
         <section className="section" id="about">
           <h2>About Us</h2>
           <p>AgriDuty is a comprehensive platform designed to help farmers and agricultural businesses manage their operations efficiently.</p>
