@@ -1,8 +1,15 @@
 import requests
 import pandas as pd
 from joblib import load  # Import joblib to load the model
+from dotenv import load_dotenv, find_dotenv  # Import dotenv to load environment variables
+import os
 
-API_KEY = '363073c634ce2e0cd077aa7aafac8f78'
+# Load environment variables from .env file
+load_dotenv(find_dotenv())
+
+# Get the API key from the environment variable
+API_KEY = os.getenv('API_KEY')  # This line remains to fetch the API key
+
 LAT, LON = 41.8781, -87.6298
 
 # Updated URL for the specified API endpoint
