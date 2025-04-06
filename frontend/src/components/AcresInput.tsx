@@ -65,7 +65,8 @@ const AcresInput = () => {
             textAlign: 'right',
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             transition: 'all 0.3s ease',
-            outline: 'none'
+            outline: 'none',
+            color: '#2c5530'
           }}
           onFocus={(e) => {
             e.target.style.borderColor = '#4a7856';
