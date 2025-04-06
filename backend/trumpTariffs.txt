@@ -10,3 +10,16 @@ Philippines: 17
 Indonesia: 32
 Taiwan: 32
 Bangladesh: 37
+Colombia: 10
+Egypt: 10
+Saudi Arabia: 10
+Turkey: 10
+Haiti: 10
+Guatemala: 10
+United Arab Emirates: 10
+Eritrea: 10
+Djibouti: 10
+Japan: 10
+United Kingdom: 10
+
+
