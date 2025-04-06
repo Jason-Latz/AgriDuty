@@ -1,0 +1,10 @@
+Corn: Mexico, Japan, Colombia, South Korea, Canada
+Soybean: China, European Union, Mexico, Indonesia, Egypt
+Hay: Japan, China, South Korea, Saudi Arabia, Taiwan
+Wheat: Mexico, Philippines, Japan, China, South Korea
+Cotton: China, Pakistan, Vietnam, Turkey, Bangladesh
+Rice: Mexico, Japan, Haiti, South Korea, Canada
+Sugar: Mexico, Canada, European Union, Japan, Guatemala 
+Tree Nuts: European Union, India, China, Canada, United Arab Emirates 
+Sorghum: China, Mexico, Eritrea, Djibouti, Sudan
+Barley: Canada, Mexico, South Korea, Japan, United Kingdom
