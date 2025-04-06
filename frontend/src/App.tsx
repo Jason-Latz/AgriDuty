@@ -12,7 +12,7 @@ function App() {
       {/* Banner Section */}
       <header className="banner">
         <div className="banner-content">
-          <h1>AgriDuty</h1>
+          <h1>WildTariffs</h1>
           <p>Make data-driven decisions based on tariffs and weather</p>
           <nav className="banner-nav">
             <a href="#home" onClick={(e) => {
@@ -41,7 +41,7 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>&copy; 2024 AgriDuty. All rights reserved.</p>
+        <p>&copy; 2024 WildTariffs. All rights reserved.</p>
       </footer>
     </div>
   )

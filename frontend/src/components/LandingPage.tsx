@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
       <div className="landing-content">
-        <h1>Welcome to AgriDuty</h1>
+        <h1>Welcome to WildTariffs</h1>
         <p className="landing-subtitle">
           Your Agricultural Management Solution
         </p>
