@@ -1,20 +1,20 @@
 Corn
 Soybeans
-Hay & Forages
 Wheat
-Cotton
 Rice
-Sorghum
+Cotton
 Barley
-Peanuts
-Sugar Beets
+Oats
+Sorghum
 Potatoes
 Tomatoes
-Oranges
-Apples
-Grapes
 Lettuce
-Almonds
-Sunflowers
-Canola
-Dry Beans
+Carrots
+Onions
+Apples
+Oranges
+Grapes
+Strawberries
+Sunflower
+Alfalfa
+Peanuts
