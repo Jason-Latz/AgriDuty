@@ -34,6 +34,17 @@ except Exception as e:
     print(f"Error loading crops: {e}")
     crops = []
 
+# Load crop countries from countries.txt
+crop_countries = {}
+try:
+    with open('countries.txt', 'r') as file:
+        for line in file:
+            crop, countries = line.split(':')
+            crop_countries[crop.strip()] = [country.strip() for country in countries.split(',')]
+    print(f"Loaded countries for {len(crop_countries)} crops from countries.txt")
+except Exception as e:
+    print(f"Error loading countries: {e}")
+
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -90,8 +101,14 @@ def predict():
             # Make predictions
             quantity_normalized = model.predict(input_data)[0]  # Get the predicted quantity normalized
             print(f"Prediction for {crop}: {quantity_normalized}")  # Print the prediction to the terminal
-            predictions_list.append({"crop": crop, "prediction": float(quantity_normalized)})
-        
+            
+            # Add countries to the prediction
+            countries = crop_countries.get(crop, [])
+            predictions_list.append({
+                "crop": crop,
+                "prediction": float(quantity_normalized),
+                "countries": countries
+            })
         
         # Sort predictions in descending order
         predictions_list = sorted(predictions_list, key=lambda x: x['prediction'], reverse=True)
