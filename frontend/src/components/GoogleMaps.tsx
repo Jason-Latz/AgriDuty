@@ -2,21 +2,24 @@ import { APIProvider, Map, MapMouseEvent } from "@vis.gl/react-google-maps";
 import { useState } from "react";
 import AcresInput from "./AcresInput";
 
-const GoogleMaps = () => {
+interface Recommendation {
+  topRecommendations: string[];
+  justification1: string;
+  justification2: string;
+  justification3: string;
+}
+
+interface GoogleMapsProps {
+  onRecommendationsChange: (recommendations: Recommendation | null) => void;
+}
+
+const GoogleMaps: React.FC<GoogleMapsProps> = ({ onRecommendationsChange }) => {
   const [coordinates, setCoordinates] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
-  const [recommendations, setRecommendations] = useState<{
-    topRecommendations: string[];
-    justification1: string;
-    justification2: string;
-    justification3: string;
-  } | null>(null);
-  // const [modelResponse, setModelResponse] = useState("");
 
   const handleMapClick = (e: MapMouseEvent) => {
-    console.log("firedd")
     if (e.detail.latLng) {
       setCoordinates({
         lat: e.detail.latLng.lat,
@@ -28,27 +31,39 @@ const GoogleMaps = () => {
   const sendLocation = async () => {
     if (!coordinates) {
         console.error("Coordinates are not set. Please click on the map to set them.");
-        return; // Exit if coordinates are not set
+        return;
     }
 
-    const response = await fetch("http://localhost:5001/predict", {
-        mode: "cors",
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            lat: coordinates.lat, // Use the coordinates from the map
-            lon: coordinates.lng   // Use the coordinates from the map
-        })
-    });
+    try {
+      const response = await fetch("http://localhost:5001/predict", {
+          mode: "cors",
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              lat: coordinates.lat,
+              lon: coordinates.lng
+          })
+      });
 
-    if (response.ok) {
-        const parsedData = await response.json();
-        console.log(parsedData);
-        setRecommendations(parsedData);
-    } else {
-        console.error("Error fetching predictions:", response.statusText);
+      if (response.ok) {
+          const responseText = await response.text();
+          try {
+              const parsedData = JSON.parse(responseText);
+              console.log(parsedData);
+              onRecommendationsChange(parsedData);
+          } catch (error) {
+              console.error("Error parsing JSON response:", error);
+              onRecommendationsChange(null);
+          }
+      } else {
+          console.error("Error fetching predictions:", response.statusText);
+          onRecommendationsChange(null);
+      }
+    } catch (error) {
+      console.error("Error making request:", error);
+      onRecommendationsChange(null);
     }
   };
 
@@ -64,19 +79,17 @@ const GoogleMaps = () => {
             onClick={handleMapClick}
             restriction={{
               latLngBounds: {
-                north: 52.0, // Northernmost point (Alaska)
-                south: 18.0, // Southernmost point (Hawaii)
-                west: -140.0, // Westernmost point (Alaska)
-                east: -60.0, // Easternmost point (Maine)
+                north: 52.0,
+                south: 18.0,
+                west: -140.0,
+                east: -60.0,
               },
               strictBounds: false
             }}
-
           />
         </div>
 
         <div className="map-controls">
-          
           <div className="coordinates-display">
             <h3>Coordinates</h3>
             <div className="coordinate-field">
@@ -120,8 +133,6 @@ const GoogleMaps = () => {
               </button>
             </div>
           </div>
-          
-         
         </div>
       </div>
     </APIProvider>

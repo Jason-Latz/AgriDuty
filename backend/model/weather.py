@@ -217,7 +217,8 @@ def predict():
 
         # response = gemini_analysis
         print(gemini_response.text)
-        return jsonify(gemini_response.text)
+        result = gemini_response.text
+        return jsonify(result)
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
