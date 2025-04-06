@@ -6,6 +6,8 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import mean_squared_error
 from joblib import dump  # Import joblib for saving the model
+from sklearn.impute import SimpleImputer  # Import SimpleImputer for handling missing values
+from sklearn.pipeline import Pipeline  # Import Pipeline for creating a processing pipeline
 
 # Load the dataset
 df = pd.read_csv("dataset.csv")
@@ -30,6 +32,9 @@ y = df['quantity_normalized']
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Define the imputer to handle missing values
+imputer = SimpleImputer(strategy='mean')  # You can choose other strategies like 'median' or 'most_frequent'
+
 # Define base models
 rf = RandomForestRegressor(n_estimators=100, random_state=42)
 dt = DecisionTreeRegressor(random_state=42)
@@ -44,14 +49,20 @@ ensemble = VotingRegressor(estimators=[
     ('knn', knn)
 ])
 
-# Train the model
-ensemble.fit(X_train, y_train)
+# Create a pipeline that first imputes missing values and then fits the ensemble model
+pipeline = Pipeline(steps=[
+    ('imputer', imputer),
+    ('ensemble', ensemble)
+])
+
+# Train the model using the pipeline
+pipeline.fit(X_train, y_train)
 
 # Save the model as a .pkl file
-dump(ensemble, 'model.pkl')  # Save the trained model to a .pkl file
+dump(pipeline, 'model.pkl')  # Save the trained model to a .pkl file
 
 # Predict
-y_pred = ensemble.predict(X_test)   
+y_pred = pipeline.predict(X_test)   
 
 # Evaluate
 mse = mean_squared_error(y_test, y_pred)

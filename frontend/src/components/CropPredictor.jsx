@@ -50,12 +50,16 @@ const CropPredictor = () => {
       return;
     }
 
+    // Log the values to check if they are correct
+    console.log('Latitude:', location.lat);
+    console.log('Longitude:', location.lon);
+
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await axios.post(`${API_URL}/predict`, {
-        lat: parseFloat(location.lat),
+        lat: parseFloat(location.lat),  
         lon: parseFloat(location.lon)
       });
       

@@ -44,7 +44,7 @@ def predict():
         
         # Validate latitude and longitude
         if lat is None or lon is None:
-            return jsonify({'error': 'Latitude and longitude are required'}), 400
+            return jsonify({'error': 'Latitude and longitude are required', 'lat': lat, 'lon': lon}), 400
         
         # Weather API URL
         weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={WEATHER_API_KEY}&units=metric"

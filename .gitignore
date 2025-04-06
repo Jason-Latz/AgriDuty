@@ -1,2 +1,6 @@
+node_modules
 backend/model/model.pkl
+backend/venv
 .env
+package.json
+package-lock.json
