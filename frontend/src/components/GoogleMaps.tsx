@@ -19,23 +19,31 @@ const GoogleMaps = () => {
     }
   };
   
-  const sendLocation = async() => {
-    const response = await fetch("http://localhost:5000/predict", {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        lat: coordinates?.lat,
-        lng: coordinates?.lng
-      })
-    })
-    if(response.ok) {
-      const parsedData = response.json()
-      console.log(parsedData)
+  const sendLocation = async () => {
+    if (!coordinates) {
+        console.error("Coordinates are not set. Please click on the map to set them.");
+        return; // Exit if coordinates are not set
     }
-  }
+
+    const response = await fetch("http://localhost:5000/predict", {
+        mode: "cors",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            lat: coordinates.lat, // Use the coordinates from the map
+            lon: coordinates.lng   // Use the coordinates from the map
+        })
+    });
+
+    if (response.ok) {
+        const parsedData = await response.json(); // Await the JSON parsing
+        console.log(parsedData);
+    } else {
+        console.error("Error fetching predictions:", response.statusText);
+    }
+  };
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
