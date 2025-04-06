@@ -336,96 +336,72 @@ main {
   font-family: monospace;
 }
 
-/* Recommendations Section Styles */
-.recommendations-section {
-  margin-top: 3rem;
-  padding: 2rem;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.recommendations-section h2 {
-  color: #2c5530;
-  margin-bottom: 2rem;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
+/* Recommendations Styles */
 .recommendations-container {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 2rem;
-}
-
-.recommendations-list {
-  background: #f8f9fa;
-  padding: 1.5rem;
+  background: white;
+  padding: 2rem;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 1200px;
 }
 
-.recommendations-list h3 {
+.recommendations-container h2 {
   color: #2c5530;
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
 }
 
-.recommendations-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.recommendations-table {
+  margin-bottom: 2rem;
 }
 
-.recommendations-list li {
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.5rem;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  color: #2d3748;
-  font-weight: 500;
-  transition: all 0.2s ease;
+.recommendations-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
 }
 
-.recommendations-list li:hover {
-  background: #e9f5f0;
-  transform: translateX(5px);
+.recommendations-table th,
+.recommendations-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.recommendations-list li.placeholder {
-  color: #718096;
-  font-style: italic;
-  text-align: center;
-  padding: 1.5rem;
-  background: #f8f9fa;
-  border: 1px dashed #e2e8f0;
+.recommendations-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c5530;
+}
+
+.recommendations-table tr:hover {
+  background-color: #f8f9fa;
 }
 
 .justifications {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .justifications h3 {
   color: #2c5530;
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
 .justification-card {
   background: #f8f9fa;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
   border: 1px solid #e2e8f0;
 }
 
 .justification-card h4 {
   color: #2c5530;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-size: 1.2rem;
   font-weight: 600;
 }
@@ -433,13 +409,6 @@ main {
 .justification-card p {
   color: #4a5568;
   line-height: 1.6;
-  margin: 0;
-}
-
-.justification-card:not(:has(h4)) {
-  text-align: center;
-  color: #718096;
-  font-style: italic;
 }
 
 /* Responsive Design */
@@ -482,10 +451,16 @@ main {
   }
 
   .recommendations-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .recommendations-section {
     padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .recommendations-table th,
+  .recommendations-table td {
+    padding: 0.75rem;
+  }
+
+  .justification-card {
+    padding: 1.25rem;
   }
 }
