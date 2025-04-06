@@ -89,6 +89,7 @@ def predict():
             
             # Make predictions
             quantity_normalized = model.predict(input_data)[0]  # Get the predicted quantity normalized
+            print(f"Prediction for {crop}: {quantity_normalized}")  # Print the prediction to the terminal
             predictions_list.append({"crop": crop, "prediction": float(quantity_normalized)})
         
         # Sort predictions in descending order
