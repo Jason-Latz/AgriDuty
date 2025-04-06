@@ -24,7 +24,7 @@ const GoogleMaps = () => {
           <Map
             style={{ width: "100%", height: "100%" }}
             defaultCenter={{ lat: 39.8283, lng: -98.5795 }}
-            defaultZoom={3.5}
+            defaultZoom={4}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
             onClick={handleMapClick}
@@ -35,7 +35,7 @@ const GoogleMaps = () => {
                 west: -140.0, // Westernmost point (Alaska)
                 east: -60.0, // Easternmost point (Maine)
               },
-              strictBounds: true,
+              strictBounds: false
             }}
           />
         </div>
