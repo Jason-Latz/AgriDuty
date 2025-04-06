@@ -2,17 +2,16 @@ import pandas as pd
 import numpy as np
 import random
 
-# Define the top 20 US crops
-top_20_crops = [
-    "Corn", "Soybeans", "Hay & Forages", "Wheat", "Cotton", "Rice", "Sorghum",
-    "Barley", "Peanuts", "Sugar Beets", "Potatoes", "Tomatoes", "Oranges",
-    "Apples", "Grapes", "Lettuce", "Almonds", "Sunflowers", "Canola", "Dry Beans"
+# Define the top 10 US crops
+top_10_crops = [
+    "Corn", "Soybean", "Hay", "Wheat", "Cotton",
+    "Rice", "Sugar", "Tree Nuts", "Sorghum", "Barley"
 ]
 
 # Define number of data points per crop per month
 data_points_per_month = 100
 num_months = 12
-num_crops = len(top_20_crops)
+num_crops = len(top_10_crops)  # Use the correct variable name
 total_rows = num_crops * num_months * data_points_per_month
 
 # Basic seasonal patterns (simplified) - centered around July (month 7)
@@ -32,7 +31,7 @@ def get_seasonal_value(month, base, amplitude, phase_shift=0):
 # In a real scenario, these would be carefully researched. Here, we assign somewhat plausible values.
 crop_details = {}
 random.seed(42) # for reproducibility
-for crop in top_20_crops:
+for crop in top_10_crops:
     # Assign somewhat plausible random optimal conditions and season
     opt_temp = random.uniform(18, 30) # Optimal Celsius
     temp_tolerance = random.uniform(5, 10) # Range around optimum
@@ -53,7 +52,7 @@ for crop in top_20_crops:
 
 # Generate data
 data = []
-for crop in top_20_crops:
+for crop in top_10_crops:
     details = crop_details[crop]
     for month in range(1, 13):
         for _ in range(data_points_per_month):

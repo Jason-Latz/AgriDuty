@@ -92,8 +92,12 @@ def predict():
             print(f"Prediction for {crop}: {quantity_normalized}")  # Print the prediction to the terminal
             predictions_list.append({"crop": crop, "prediction": float(quantity_normalized)})
         
+        
         # Sort predictions in descending order
         predictions_list = sorted(predictions_list, key=lambda x: x['prediction'], reverse=True)
+        
+        # Print the entire predictions list
+        print("Predictions List:", predictions_list)  # Print the predictions list
         
         # Prepare the response
         response = {
