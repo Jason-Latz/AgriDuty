@@ -26,7 +26,6 @@ const GoogleMaps = () => {
             defaultCenter={{ lat: 39.8283, lng: -98.5795 }}
             defaultZoom={4}
             gestureHandling={"greedy"}
-            disableDefaultUI={true}
             onClick={handleMapClick}
             restriction={{
               latLngBounds: {
@@ -37,6 +36,7 @@ const GoogleMaps = () => {
               },
               strictBounds: false
             }}
+
           />
         </div>
 
