@@ -6,6 +6,8 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import datetime
+from google import genai
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -14,16 +16,20 @@ CORS(app)  # Enable CORS for all routes
 # Load environment variables from .env file
 load_dotenv(find_dotenv())
 
-# Get the API key from the environment variables
+# Get the API keys from the environment variables
 WEATHER_API_KEY = os.getenv('API_KEY')  # Weather API key
+
+# gemini_model = genai.GenerativeModel('gemini-pro', generation_config={
+#     'temperature': 0.2
+# })
 
 # Load the trained model
 try:
-    model = load('model.pkl')  # Load your trained model
+    ml_model = load('model.pkl')  # Load your trained model
     print("Model loaded successfully!")
 except Exception as e:
     print(f"Error loading model: {e}")
-    model = None
+    ml_model = None
 
 # Load crop types from crops.txt
 try:
@@ -79,7 +85,7 @@ def predict():
         current_month = datetime.datetime.now().month
         
         # Check if model is loaded
-        if model is None or not crops:
+        if ml_model is None or not crops:
             return jsonify({'error': 'Model or crops data not loaded correctly'}), 500
         
         # Prepare a list to store predictions
@@ -99,7 +105,7 @@ def predict():
             })
             
             # Make predictions
-            quantity_normalized = model.predict(input_data)[0]  # Get the predicted quantity normalized
+            quantity_normalized = ml_model.predict(input_data)[0]  # Get the predicted quantity normalized
             print(f"Prediction for {crop}: {quantity_normalized}")  # Print the prediction to the terminal
             
             # Add countries to the prediction
@@ -107,7 +113,7 @@ def predict():
             predictions_list.append({
                 "crop": crop,
                 "prediction": float(quantity_normalized),
-                "countries": countries
+                "top_countries": countries
             })
         
         # Sort predictions in descending order
@@ -116,24 +122,102 @@ def predict():
         # Print the entire predictions list
         print("Predictions List:", predictions_list)  # Print the predictions list
         
-        # Prepare the response
-        response = {
-            'location': {
-                'lat': lat,
-                'lon': lon,
-                'name': weather_data.get('name', 'Unknown Location')
-            },
-            'weather': {
-                'temperature': temperature_celsius,
-                'humidity': humidity_percent,
-                'pressure': pressure_hpa,
-                'wind_speed': wind_speed_mps
-            },
-            'predictions': predictions_list,
-            'timestamp': datetime.datetime.now().isoformat()
-        }
+        # Generate Gemini analysis
+
+
+        GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')  # Gemini API key
+
+        # Configure Gemini API
+        client = genai.Client(api_key=GEMINI_API_KEY)
         
-        return jsonify(response)
+        prompt = f"""
+        I would like you to predict how well various common United States agricultural exports will fare under recent federal tariff policies. Your response MUST be in a .json format with the following structure:
+        {{
+            "topRecommendations": ["crop1", "crop2", "crop3", ...],
+            "justification1": "50 word or less justification for the first recommendation",
+            "justification2": "50 word or less justification for the second recommendation",
+            "justification3": "50 word or less justification for the third recommendation"
+        }}
+
+        To generate this response, utilize the following approach:
+
+        Observe the rankings and normalized value (A measure of how well the crop does in its specified environment, with 1 being the crop does perfectly and 0 being the crop cannot grow) given to you at the *MLoutput* heading in the prompt.
+        Predict the retaliatory tariffs from the top 5 importers of each crop given at *MLoutput* under "top_countries" by:
+        - Using the tariff rates given to you at the *TariffRates* heading in the prompt
+        - Analyzing the geopolitical relations between each country and the United States
+        - Conducting a brief sentiment analysis of government statements or reputable news outlets originating in the country in question to obtain general attitudes that may predict retaliatory tariff rates
+        Predict the price effects on each crop of the retaliatory tariffs calculated in step 2
+        Given the effects of the calculated price effects on the crops and the normalized values, rank all of the crops from best to worst on their upcoming profitability, returning them from most profitable to least profitable in the array of strings "topRecommendations" of the json output.
+        For the top 3 ranked crops, provide a brief 50 word or less bullet point justification for why you chose that ranking (justification in the .json). For the justification, replace mentions of the normalized value with regional climate compatibility.
+
+        Take your time to reason through each step, and ensure that each justification is clear and concise.
+
+        *TariffRates*:
+        Vietnam: 46%
+        Thailand: 36%
+        China: 34%
+        Pakistan: 29%
+        India: 27%
+        South Korea: 25%
+        Japan: 24%
+        European Union: 20%
+        Philippines: 17%
+        Indonesia: 32%
+        Taiwan: 32%
+        Bangladesh: 37%
+        Colombia: 10%
+        Egypt: 10%
+        Saudi Arabia: 10%
+        Turkey: 10%
+        Haiti: 10%
+        Guatemala: 10%
+        United Arab Emirates: 10%
+        Eritrea: 10%
+        Djibouti: 10%
+        Japan: 10%
+        United Kingdom: 10%
+        Mexico: 25%
+        Canada: 25%
+
+        *MLoutput*:
+        {predictions_list}
+        """
+        
+
+        gemini_response = client.models.generate_content(
+            model="gemini-2.0-flash", contents=prompt
+        )
+
+        print(gemini_response.text)
+
+        # try:
+        #     gemini_response = gemini_model.generate_content(prompt)
+        #     gemini_analysis = gemini_response.text
+        # except Exception as e:
+        #     print(f"Error getting Gemini analysis: {e}")
+        #     gemini_analysis = "Unable to generate analysis at this time."
+
+        # Prepare the response
+        # response = {
+        #     'location': {
+        #         'lat': lat,
+        #         'lon': lon,
+        #         'name': weather_data.get('name', 'Unknown Location')
+        #     },
+        #     'weather': {
+        #         'temperature': temperature_celsius,
+        #         'humidity': humidity_percent,
+        #         'pressure': pressure_hpa,
+        #         'wind_speed': wind_speed_mps
+        #     },
+        #     'predictions': predictions_list,
+        #     'gemini_analysis': gemini_analysis,
+        #     'timestamp': datetime.datetime.now().isoformat()
+        # }
+
+        # response = gemini_analysis
+        print(gemini_response.text)
+        return jsonify(gemini_response.text)
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -144,4 +228,4 @@ def health():
     return jsonify({'status': 'ok', 'message': 'Service is running'})
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
