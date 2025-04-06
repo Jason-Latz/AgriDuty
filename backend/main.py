@@ -10,9 +10,15 @@ from joblib import dump  # Import joblib for saving the model
 # Load the dataset
 df = pd.read_csv("dataset.csv")
 
-# Encode categorical columns
-le_crop = LabelEncoder()
-df['crop_type'] = le_crop.fit_transform(df['crop_type'])  # e.g., Hay & Forages → 0, Lettuce → 1, etc.
+# Load crop types from crops.txt
+with open('crops.txt', 'r') as file:
+    crops = [line.strip() for line in file.readlines()]  # Read and strip whitespace
+
+# Create a mapping from crop names to integers
+crop_mapping = {crop: index for index, crop in enumerate(crops)}
+
+# Map the crop_type in the DataFrame using the mapping
+df['crop_type'] = df['crop_type'].map(crop_mapping)
 
 # Ensure month is numeric (you can encode if needed)
 # df['month'] = LabelEncoder().fit_transform(df['month'])  # optional if month is already numeric
