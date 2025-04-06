@@ -7,8 +7,10 @@ const GoogleMaps = () => {
     lat: number;
     lng: number;
   } | null>(null);
+  // const [modelResponse, setModelResponse] = useState("");
 
   const handleMapClick = (e: MapMouseEvent) => {
+    console.log("firedd")
     if (e.detail.latLng) {
       setCoordinates({
         lat: e.detail.latLng.lat,
@@ -16,6 +18,24 @@ const GoogleMaps = () => {
       });
     }
   };
+  
+  const sendLocation = async() => {
+    const response = await fetch("http://localhost:5000/predict", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lat: coordinates?.lat,
+        lng: coordinates?.lng
+      })
+    })
+    if(response.ok) {
+      const parsedData = response.json()
+      console.log(parsedData)
+    }
+  }
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
@@ -41,6 +61,7 @@ const GoogleMaps = () => {
         </div>
 
         <div className="map-controls">
+          
           <div className="coordinates-display">
             <h3>Coordinates</h3>
             <div className="coordinate-field">
@@ -54,9 +75,11 @@ const GoogleMaps = () => {
               <div className="coordinate-value">
                 {coordinates ? coordinates.lng.toFixed(6) : "Click on map"}
               </div>
+              <p onClick={sendLocation} className="bg-green-300 rounded inline cursor-pointer">Talk To AGRI</p>
             </div>
           </div>
           <AcresInput />
+         
         </div>
       </div>
     </APIProvider>

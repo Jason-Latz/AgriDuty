@@ -1,13 +1,13 @@
-import React from 'react';
-import GoogleMaps from './GoogleMaps';
+import React from "react";
+import GoogleMaps from "./GoogleMaps";
+
 const Home: React.FC = () => {
   return (
     <section className="section" id="home">
       <p>Click</p>
-      <GoogleMaps />  
-      
+      <GoogleMaps />
     </section>
   );
 };
 
-export default Home; 
+export default Home;
