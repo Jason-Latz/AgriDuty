@@ -1,0 +1,12 @@
+Vietnam: 46
+Thailand: 36
+China: 34
+Pakistan: 29
+India: 27
+South Korea: 25
+Japan: 24
+European Union: 20
+Philippines: 17
+Indonesia: 32
+Taiwan: 32
+Bangladesh: 37
