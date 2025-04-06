@@ -25,7 +25,7 @@ const GoogleMaps = () => {
         return; // Exit if coordinates are not set
     }
 
-    const response = await fetch("http://localhost:5000/predict", {
+    const response = await fetch("http://localhost:5001/predict", {
         mode: "cors",
         method: "POST",
         headers: {
@@ -83,7 +83,34 @@ const GoogleMaps = () => {
               <div className="coordinate-value">
                 {coordinates ? coordinates.lng.toFixed(6) : "Click on map"}
               </div>
-              <p onClick={sendLocation} className="bg-green-300 rounded inline cursor-pointer">Talk To AGRI</p>
+              <button
+                onClick={sendLocation}
+                style={{
+                  backgroundColor: '#2c5530',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '10px 40px',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  width: '100%',
+                  maxWidth: '240px',
+                  fontWeight: '600',
+                  letterSpacing: '0.5px',
+                  marginTop: '12px'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#4a7856';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2c5530';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                Talk to Agri
+              </button>
             </div>
           </div>
           <AcresInput />
