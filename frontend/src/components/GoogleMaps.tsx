@@ -7,6 +7,12 @@ const GoogleMaps = () => {
     lat: number;
     lng: number;
   } | null>(null);
+  const [recommendations, setRecommendations] = useState<{
+    topRecommendations: string[];
+    justification1: string;
+    justification2: string;
+    justification3: string;
+  } | null>(null);
   // const [modelResponse, setModelResponse] = useState("");
 
   const handleMapClick = (e: MapMouseEvent) => {
@@ -38,8 +44,9 @@ const GoogleMaps = () => {
     });
 
     if (response.ok) {
-        const parsedData = await response.json(); // Await the JSON parsing
+        const parsedData = await response.json();
         console.log(parsedData);
+        setRecommendations(parsedData);
     } else {
         console.error("Error fetching predictions:", response.statusText);
     }
@@ -109,11 +116,11 @@ const GoogleMaps = () => {
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                Talk to Agri
+                Analyze
               </button>
             </div>
           </div>
-          <AcresInput />
+          
          
         </div>
       </div>
