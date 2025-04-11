@@ -1,6 +1,6 @@
-# AgriDuty Backend
+# AgriDuty 
 
-This is the Flask backend for the AgriDuty application, which predicts crop yields based on weather data for a given location.
+Setup for the AgriDuty application, which predicts crop yields based on weather data for a given location.
 
 ## Setup
 
