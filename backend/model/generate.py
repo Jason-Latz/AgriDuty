@@ -1,3 +1,5 @@
+"""Utility to generate a synthetic crop dataset for the demo model."""
+
 import pandas as pd
 import numpy as np
 import random
@@ -50,7 +52,9 @@ for crop in top_10_crops:
         'season_length': season_length
     }
 
-# Generate data
+# Generate a large set of randomized weather records for each crop. The
+# resulting CSV is used to train a simple model included with the
+# repository.
 data = []
 for crop in top_10_crops:
     details = crop_details[crop]
