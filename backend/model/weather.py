@@ -18,10 +18,10 @@ load_dotenv(find_dotenv())
 
 # Get the API keys from the environment variables
 WEATHER_API_KEY = os.getenv('API_KEY')  # Weather API key
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-# gemini_model = genai.GenerativeModel('gemini-pro', generation_config={
-#     'temperature': 0.2
-# })
+# Initialize Gemini client once
+gemini_client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 # Load the trained model
 try:
@@ -88,33 +88,24 @@ def predict():
         if ml_model is None or not crops:
             return jsonify({'error': 'Model or crops data not loaded correctly'}), 500
         
-        # Prepare a list to store predictions
-        # Collect prediction results for each crop in this list
+        # Vectorize prediction for all crops at once
+        input_data = pd.DataFrame({
+            'crop_type': list(range(len(crops))),
+            'month': [current_month] * len(crops),
+            'temperature_celsius': [temperature_celsius] * len(crops),
+            'humidity_percent': [humidity_percent] * len(crops),
+            'pressure_hpa': [pressure_hpa] * len(crops),
+            'rainfall_mm': [rainfall_mm] * len(crops),
+            'wind_speed_mps': [wind_speed_mps] * len(crops)
+        })
+
+        predictions = ml_model.predict(input_data)
         predictions_list = []
-        
-        # Iterate through each crop and make predictions
-        for crop_type_index, crop in enumerate(crops):
-            # Create a single-row DataFrame representing the current weather
-            # conditions for the crop being evaluated
-            input_data = pd.DataFrame({
-                'crop_type': [crop_type_index],
-                'month': [current_month],
-                'temperature_celsius': [temperature_celsius],
-                'humidity_percent': [humidity_percent],
-                'pressure_hpa': [pressure_hpa],
-                'rainfall_mm': [rainfall_mm],
-                'wind_speed_mps': [wind_speed_mps]
-            })
-            
-            # Make predictions
-            quantity_normalized = ml_model.predict(input_data)[0]  # Get the predicted quantity normalized
-            print(f"Prediction for {crop}: {quantity_normalized}")  # Print the prediction to the terminal
-            
-            # Add countries to the prediction
+        for crop, quantity in zip(crops, predictions):
             countries = crop_countries.get(crop, [])
             predictions_list.append({
                 "crop": crop,
-                "prediction": float(quantity_normalized),
+                "prediction": float(quantity),
                 "top_countries": countries
             })
         
@@ -127,10 +118,8 @@ def predict():
         # Generate Gemini analysis
 
 
-        GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')  # Gemini API key
-
-        # Configure Gemini API
-        client = genai.Client(api_key=GEMINI_API_KEY)
+        if gemini_client is None:
+            return jsonify({'error': 'Gemini API key not configured'}), 500
         
         prompt = f"""
         I would like you to predict how well various common United States agricultural exports will fare under recent federal tariff policies. Your response MUST be in a .json format with the following structure:
@@ -186,10 +175,9 @@ def predict():
         """
         
 
-        gemini_response = client.models.generate_content(
+        gemini_response = gemini_client.models.generate_content(
             model="gemini-2.0-flash", contents=prompt
         )
-
         print(gemini_response.text)
 
         # try:
@@ -218,7 +206,6 @@ def predict():
         # }
 
         # response = gemini_analysis
-        print(gemini_response.text)
         result = gemini_response.text
         return jsonify(result)
     

@@ -26,39 +26,33 @@ const GoogleMaps = () => {
   };
   
   const sendLocation = async () => {
-    // Set static data for display
-    const staticData = {
-      topRecommendations: ["Corn", "Rice", "Barley", "Sugar", "Hay", "Tree Nuts", "Wheat", "Sorghum", "Cotton", "Soybean"],
-      justification1: "Corn faces tariffs from Mexico, Japan, South Korea and Canada all at 25% or lower, with overall positive relations. Given the crop's regional climate compatibility, Corn will likely remain profitable despite the tariffs.",
-      justification2: "Like Corn, Rice faces tariffs of 25% or lower from Mexico, Japan, South Korea and Canada, with overall positive relations. The comparatively minor tariffs will not affect the bottom line, especially given its regional climate compatibility.",
-      justification3: "Barley's top importers are Canada, Mexico, South Korea, Japan, and United Kingdom which all maintain positive relations and have tariffs of 25% or lower. Given the crop's regional climate compatibility, profitability will likely remain stable."
-    };
-    setRecommendations(staticData);
+    if (!coordinates) return;
+    try {
+      const response = await fetch("http://localhost:5001/predict", {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lat: coordinates.lat,
+          lon: coordinates.lng,
+        }),
+      });
 
-    // Log API results to console
-    if (coordinates) {
-      try {
-        const response = await fetch("http://localhost:5001/predict", {
-          mode: "cors",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lat: coordinates.lat,
-            lon: coordinates.lng
-          })
-        });
-
-        if (response.ok) {
-          const parsedData = await response.json();
-          console.log("API Response:", parsedData);
-        } else {
-          console.error("Error fetching predictions:", response.statusText);
+      if (response.ok) {
+        const parsed = await response.json();
+        try {
+          const data = JSON.parse(parsed);
+          setRecommendations(data);
+        } catch {
+          console.error("Invalid response format", parsed);
         }
-      } catch (error) {
-        console.error("Error making API request:", error);
+      } else {
+        console.error("Error fetching predictions:", response.statusText);
       }
+    } catch (error) {
+      console.error("Error making API request:", error);
     }
   };
 
