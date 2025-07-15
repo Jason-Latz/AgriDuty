@@ -49,7 +49,9 @@ ensemble = VotingRegressor(estimators=[
     ('knn', knn)
 ])
 
-# Create a pipeline that first imputes missing values and then fits the ensemble model
+# Build a pipeline that handles any missing values before passing the data to
+# the ensemble model. Using a pipeline keeps preprocessing and model execution
+# together for easier reuse.
 pipeline = Pipeline(steps=[
     ('imputer', imputer),
     ('ensemble', ensemble)

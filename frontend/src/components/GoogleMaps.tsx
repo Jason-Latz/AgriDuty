@@ -1,6 +1,5 @@
 import { APIProvider, Map, MapMouseEvent } from "@vis.gl/react-google-maps";
 import { useState } from "react";
-import AcresInput from "./AcresInput";
 import CropRecommendations from "./CropRecommendations";
 
 const GoogleMaps = () => {
