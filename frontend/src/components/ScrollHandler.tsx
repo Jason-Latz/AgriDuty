@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 
+// Component that toggles a CSS class on the page banner once the landing
+// section has scrolled out of view.
 const ScrollHandler: React.FC = () => {
+  // Tracks whether the landing page is no longer visible
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {

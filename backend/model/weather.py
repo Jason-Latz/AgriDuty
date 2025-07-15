@@ -89,11 +89,13 @@ def predict():
             return jsonify({'error': 'Model or crops data not loaded correctly'}), 500
         
         # Prepare a list to store predictions
+        # Collect prediction results for each crop in this list
         predictions_list = []
         
         # Iterate through each crop and make predictions
         for crop_type_index, crop in enumerate(crops):
-            # Create a DataFrame for the model input
+            # Create a single-row DataFrame representing the current weather
+            # conditions for the crop being evaluated
             input_data = pd.DataFrame({
                 'crop_type': [crop_type_index],
                 'month': [current_month],
