@@ -1,5 +1,9 @@
 import React from 'react';
 
+// Displays the ranking returned by the backend and a short justification
+// for the top three crops. When no recommendations exist it prompts the
+// user to click the map and analyze a location.
+
 interface CropRecommendationsProps {
   recommendations: {
     topRecommendations: string[];

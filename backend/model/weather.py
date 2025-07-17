@@ -1,3 +1,11 @@
+"""Flask service for generating crop predictions and market analysis.
+
+This module exposes a REST API that uses a trained scikit-learn model
+to rank common U.S. crops for a given location. It fetches real-time
+weather data from OpenWeatherMap and optionally leverages the Gemini
+API to generate a short business analysis.
+"""
+
 import requests
 import pandas as pd
 from joblib import load  # Import joblib to load the model

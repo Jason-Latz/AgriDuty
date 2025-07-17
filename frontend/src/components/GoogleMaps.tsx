@@ -3,10 +3,14 @@ import { useState } from "react";
 import CropRecommendations from "./CropRecommendations";
 
 const GoogleMaps = () => {
+  // Holds the last clicked coordinates on the map. A null value means
+  // no location has been selected yet.
   const [coordinates, setCoordinates] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
+  // Stores recommendations returned by the backend. When null no
+  // analysis has been requested yet.
   const [recommendations, setRecommendations] = useState<{
     topRecommendations: string[];
     justification1: string;
@@ -15,6 +19,8 @@ const GoogleMaps = () => {
   } | null>(null);
   // const [modelResponse, setModelResponse] = useState("");
 
+  // Record the point the user clicked on the map so we can send the
+  // location to the server for analysis.
   const handleMapClick = (e: MapMouseEvent) => {
     console.log("firedd")
     if (e.detail.latLng) {
@@ -24,21 +30,36 @@ const GoogleMaps = () => {
       });
     }
   };
-  
+
+  // Send the selected location to the backend and display a sample
+  // response while waiting.
   const sendLocation = async () => {
-    if (!coordinates) return;
-    try {
-      const response = await fetch("http://localhost:5001/predict", {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          lat: coordinates.lat,
-          lon: coordinates.lng,
-        }),
-      });
+
+    // Set static data for display
+    const staticData = {
+      topRecommendations: ["Corn", "Rice", "Barley", "Sugar", "Hay", "Tree Nuts", "Wheat", "Sorghum", "Cotton", "Soybean"],
+      justification1: "Corn faces tariffs from Mexico, Japan, South Korea and Canada all at 25% or lower, with overall positive relations. Given the crop's regional climate compatibility, Corn will likely remain profitable despite the tariffs.",
+      justification2: "Like Corn, Rice faces tariffs of 25% or lower from Mexico, Japan, South Korea and Canada, with overall positive relations. The comparatively minor tariffs will not affect the bottom line, especially given its regional climate compatibility.",
+      justification3: "Barley's top importers are Canada, Mexico, South Korea, Japan, and United Kingdom which all maintain positive relations and have tariffs of 25% or lower. Given the crop's regional climate compatibility, profitability will likely remain stable."
+    };
+    setRecommendations(staticData);
+
+    // Send the location to our Flask backend. The response contains a
+    // JSON string from the Gemini model which we log for now.
+    if (coordinates) {
+      try {
+        const response = await fetch("http://localhost:5001/predict", {
+          mode: "cors",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lat: coordinates.lat,
+            lon: coordinates.lng
+          })
+        });
+
 
       if (response.ok) {
         const parsed = await response.json();
@@ -58,6 +79,7 @@ const GoogleMaps = () => {
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
+      {/* The APIProvider supplies a Google Maps API key to child components */}
       <div className="map-container">
         <div className="map-wrapper">
           <Map
@@ -66,6 +88,7 @@ const GoogleMaps = () => {
             defaultZoom={4}
             gestureHandling={"greedy"}
             onClick={handleMapClick}
+            /* Restrict panning so the map stays roughly over North America */
             restriction={{
               latLngBounds: {
                 north: 52.0, // Northernmost point (Alaska)

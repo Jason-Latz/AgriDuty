@@ -1,97 +1,45 @@
-# AgriDuty 
+# AgriDuty
 
-Setup for the AgriDuty application, which predicts crop yields based on weather data for a given location.
+AgriDuty predicts crop performance using current weather data. The repository contains a Python backend and a React frontend.
 
-## Setup
+## Repository structure
+- **backend/** – Flask API for predictions
+- **frontend/** – React + Vite user interface
 
-1. Clone the repository
-2. Navigate to the backend directory:
-   ```
-   cd backend
-   ```
-3. Create a virtual environment:
-   ```
-   python -m venv venv
-   ```
-4. Activate the virtual environment:
-   - On Windows:
-     ```
-     venv\Scripts\activate
-     ```
-   - On macOS/Linux:
-     ```
-     source venv/bin/activate
-     ```
-5. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-6. Create a `.env` file based on `.env.example` and add your OpenWeatherMap API key:
-   ```
-   cp .env.example .env
-   ```
-   Then edit the `.env` file to add your actual API key.
+## Prerequisites
+- Python 3.10+
+- Node.js 18+
 
-## Running the Backend
-
-Start the server:
-```
+## Backend setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # on Windows use venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env      # add your API_KEY and GEMINI_API_KEY
 python model/weather.py
 ```
+The server runs on <http://localhost:5000> by default.
 
-The server will start on port 5000 by default.
+## Frontend setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+This starts the React development server on <http://localhost:5173> and proxies API requests to the backend.
 
 ## API Endpoints
 
-### Predict Crops
-
-**Endpoint:** `/predict`
-**Method:** POST
-**Body:**
+### `POST /predict`
+Request body:
 ```json
 {
   "lat": 41.8781,
   "lon": -87.6298
 }
 ```
+Returns predicted crop performance based on the provided coordinates.
 
-**Response:**
-```json
-{
-  "location": {
-    "lat": 41.8781,
-    "lon": -87.6298,
-    "name": "Chicago"
-  },
-  "weather": {
-    "temperature": 25.4,
-    "humidity": 65,
-    "pressure": 1012,
-    "wind_speed": 3.6
-  },
-  "predictions": [
-    {
-      "crop": "Corn",
-      "prediction": 0.85
-    },
-    {
-      "crop": "Soybeans",
-      "prediction": 0.75
-    },
-    ...
-  ],
-  "timestamp": "2023-07-20T15:30:45.123456"
-}
-```
-
-### Health Check
-
-**Endpoint:** `/health`
-**Method:** GET
-**Response:**
-```json
-{
-  "status": "ok",
-  "message": "Service is running"
-}
-```
+### `GET /health`
+Simple health check that returns `{ "status": "ok" }` when the service is running.
