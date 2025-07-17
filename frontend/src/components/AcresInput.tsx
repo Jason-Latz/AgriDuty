@@ -84,28 +84,7 @@ const AcresInput = () => {
       </div>
       <button
         onClick={handleAnalyze}
-        style={{
-          backgroundColor: '#2c5530',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '10px 40px',
-          fontSize: '16px',
-          cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          width: '100%',
-          maxWidth: '240px',
-          fontWeight: '600',
-          letterSpacing: '0.5px'
-        }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = '#4a7856';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = '#2c5530';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }}
+        className="analyze-button"
       >
         Analyze
       </button>
