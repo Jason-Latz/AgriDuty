@@ -7,26 +7,23 @@ const ScrollHandler: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    const landingPage = document.querySelector('.landing-page');
     const handleScroll = () => {
-      const landingPage = document.querySelector('.landing-page');
       if (landingPage) {
-        const landingPageBottom = landingPage.getBoundingClientRect().bottom;
-        setIsScrolled(landingPageBottom <= 0);
+        const bottom = (landingPage as HTMLElement).getBoundingClientRect().bottom;
+        setIsScrolled(bottom <= 0);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     const banner = document.querySelector('.banner');
     if (banner) {
-      if (isScrolled) {
-        banner.classList.add('scrolled');
-      } else {
-        banner.classList.remove('scrolled');
-      }
+      banner.classList.toggle('scrolled', isScrolled);
     }
   }, [isScrolled]);
 

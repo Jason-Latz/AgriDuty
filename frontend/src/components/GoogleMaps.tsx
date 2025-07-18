@@ -34,6 +34,7 @@ const GoogleMaps = () => {
   // Send the selected location to the backend and display a sample
   // response while waiting.
   const sendLocation = async () => {
+
     // Set static data for display
     const staticData = {
       topRecommendations: ["Corn", "Rice", "Barley", "Sugar", "Hay", "Tree Nuts", "Wheat", "Sorghum", "Cotton", "Soybean"],
@@ -59,15 +60,20 @@ const GoogleMaps = () => {
           })
         });
 
-        if (response.ok) {
-          const parsedData = await response.json();
-          console.log("API Response:", parsedData);
-        } else {
-          console.error("Error fetching predictions:", response.statusText);
+
+      if (response.ok) {
+        const parsed = await response.json();
+        try {
+          const data = JSON.parse(parsed);
+          setRecommendations(data);
+        } catch {
+          console.error("Invalid response format", parsed);
         }
-      } catch (error) {
-        console.error("Error making API request:", error);
+      } else {
+        console.error("Error fetching predictions:", response.statusText);
       }
+    } catch (error) {
+      console.error("Error making API request:", error);
     }
   };
 
